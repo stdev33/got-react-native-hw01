@@ -9,7 +9,10 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  ImageBackground,
 } from "react-native";
+import RegistrationPhotoPicker from "./RegistrationPhotoPicker";
+import BgImage from "../assets/images/photo_bg.png";
 
 export default function RegistrationScreen() {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,12 +20,13 @@ export default function RegistrationScreen() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
+      <ImageBackground source={BgImage} style={styles.container}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.formContainer}
         >
           <View style={styles.inputWrapper}>
+            <RegistrationPhotoPicker />
             <Text style={styles.title}>Реєстрація</Text>
             <View style={styles.inputGroup}>
               <TextInput
@@ -77,7 +81,7 @@ export default function RegistrationScreen() {
             <Text style={styles.loginLink}>Вже є акаунт? Увійти</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ImageBackground>
     </TouchableWithoutFeedback>
   );
 }
@@ -85,7 +89,6 @@ export default function RegistrationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F6F6F6",
     justifyContent: "flex-end",
     width: "100%",
   },
