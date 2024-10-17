@@ -11,12 +11,36 @@ import {
   Platform,
   ImageBackground,
 } from "react-native";
+import { colors } from "../styles/global";
 import RegistrationPhotoPicker from "./RegistrationPhotoPicker";
 import BgImage from "../assets/images/photo_bg.png";
 
 export default function RegistrationScreen() {
+  const [login, setLogin] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [activeInput, setActiveInput] = useState(null);
+
+  const onLoginChange = (value) => {
+    setLogin(value);
+  };
+
+  const onEmailChange = (value) => {
+    setEmail(value);
+  };
+
+  const onPasswordChange = (value) => {
+    setPassword(value);
+  };
+
+  const onSignUp = () => {
+    console.log(`Login: ${login} email: ${email} password: ${password}`);
+  };
+
+  const onSignIn = () => {
+    console.log("Sign in");
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -31,28 +55,33 @@ export default function RegistrationScreen() {
             <View style={styles.inputGroup}>
               <TextInput
                 placeholder="Логін"
-                placeholderTextColor="#BDBDBD"
+                placeholderTextColor={colors.placeholder}
+                autoCapitalize="none"
                 style={[
                   styles.inputContainer,
                   activeInput === "login" && styles.inputActive,
                 ]}
                 onFocus={() => setActiveInput("login")}
                 onBlur={() => setActiveInput(null)}
+                onChangeText={onLoginChange}
               />
               <TextInput
                 placeholder="Адреса електронної пошти"
-                placeholderTextColor="#BDBDBD"
+                placeholderTextColor={colors.placeholder}
+                autoCapitalize="none"
                 style={[
                   styles.inputContainer,
                   activeInput === "email" && styles.inputActive,
                 ]}
                 onFocus={() => setActiveInput("email")}
                 onBlur={() => setActiveInput(null)}
+                onChangeText={onEmailChange}
               />
               <View style={styles.passwordContainer}>
                 <TextInput
                   placeholder="Пароль"
-                  placeholderTextColor="#BDBDBD"
+                  placeholderTextColor={colors.placeholder}
+                  autoCapitalize="none"
                   secureTextEntry={!showPassword}
                   style={[
                     styles.inputContainer,
@@ -60,6 +89,7 @@ export default function RegistrationScreen() {
                   ]}
                   onFocus={() => setActiveInput("password")}
                   onBlur={() => setActiveInput(null)}
+                  onChangeText={onPasswordChange}
                 />
                 <TouchableOpacity
                   onPress={() => setShowPassword(!showPassword)}
@@ -74,12 +104,15 @@ export default function RegistrationScreen() {
           </View>
         </KeyboardAvoidingView>
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={styles.registerButton} onPress={() => {}}>
+          <TouchableOpacity style={styles.registerButton} onPress={onSignUp}>
             <Text style={styles.registerButtonText}>Зареєструватися</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}}>
-            <Text style={styles.loginLink}>Вже є акаунт? Увійти</Text>
-          </TouchableOpacity>
+          <View style={styles.loginTextContainer}>
+            <Text style={styles.loginText}>Вже є акаунт? </Text>
+            <TouchableOpacity onPress={onSignIn}>
+              <Text style={styles.registerText}>Увійти</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ImageBackground>
     </TouchableWithoutFeedback>
@@ -93,7 +126,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   formContainer: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.white,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     paddingHorizontal: 16,
@@ -108,23 +141,24 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    fontFamily: "Roboto-Bold",
+    fontFamily: "Roboto-Medium",
     textAlign: "center",
     marginBottom: 33,
   },
   inputContainer: {
     height: 50,
-    backgroundColor: "#F6F6F6",
-    borderColor: "#E8E8E8",
+    backgroundColor: colors.light_gray,
+    borderColor: colors.border_gray,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 16,
     fontSize: 16,
     fontFamily: "Roboto-Regular",
-    color: "#212121",
+    color: colors.black_primary,
   },
   inputActive: {
-    borderColor: "#FF6C00",
+    backgroundColor: colors.white,
+    borderColor: colors.orange,
   },
   passwordContainer: {
     position: "relative",
@@ -135,33 +169,42 @@ const styles = StyleSheet.create({
     top: 16,
   },
   showText: {
-    color: "#1B4371",
+    color: colors.blue,
     fontSize: 16,
     fontFamily: "Roboto-Regular",
   },
   buttonsContainer: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.white,
     paddingTop: 11,
     paddingHorizontal: 16,
     paddingBottom: 78,
   },
   registerButton: {
-    backgroundColor: "#FF6C00",
+    backgroundColor: colors.orange,
     borderRadius: 100,
     height: 50,
     justifyContent: "center",
     alignItems: "center",
   },
   registerButtonText: {
-    color: "#FFFFFF",
+    color: colors.white,
     fontSize: 16,
     fontFamily: "Roboto-Regular",
   },
-  loginLink: {
-    color: "#1B4371",
-    textAlign: "center",
+  loginTextContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
     marginTop: 20,
+  },
+  loginText: {
     fontSize: 16,
     fontFamily: "Roboto-Regular",
+    color: colors.blue,
+  },
+  registerText: {
+    fontSize: 16,
+    fontFamily: "Roboto-Regular",
+    color: colors.blue,
+    textDecorationLine: "underline",
   },
 });

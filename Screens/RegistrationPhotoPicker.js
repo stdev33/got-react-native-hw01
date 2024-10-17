@@ -6,6 +6,7 @@ import {
   Text,
   ImageBackground,
 } from "react-native";
+import { colors } from "../styles/global";
 
 export default function RegistrationPhotoPicker() {
   return (
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
   photoPlaceholder: {
     width: 120,
     height: 120,
-    backgroundColor: "#F6F6F6",
+    backgroundColor: colors.light_gray,
     borderRadius: 16,
     justifyContent: "center",
     alignItems: "center",
@@ -45,13 +46,13 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     borderWidth: 1,
-    borderColor: "#FF6C00",
+    borderColor: colors.orange,
     borderRadius: 12.5,
     justifyContent: "center",
     alignItems: "center",
   },
   addButtonText: {
-    color: "#FF6C00",
+    color: colors.orange,
     fontFamily: "Roboto-Regular",
     fontSize: 20,
   },
