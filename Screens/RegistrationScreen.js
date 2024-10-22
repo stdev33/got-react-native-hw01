@@ -12,7 +12,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { colors } from "../styles/global";
-import RegistrationPhotoPicker from "./RegistrationPhotoPicker";
+import RegistrationPhotoPicker from "../components/RegistrationPhotoPicker";
 import BgImage from "../assets/images/photo_bg.png";
 
 export default function RegistrationScreen() {
