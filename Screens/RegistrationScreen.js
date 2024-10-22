@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { colors } from "../styles/global";
 import RegistrationPhotoPicker from "../components/RegistrationPhotoPicker";
+import Button from "../components/Button";
 import BgImage from "../assets/images/photo_bg.png";
 
 export default function RegistrationScreen() {
@@ -104,9 +105,7 @@ export default function RegistrationScreen() {
           </View>
         </KeyboardAvoidingView>
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={styles.registerButton} onPress={onSignUp}>
-            <Text style={styles.registerButtonText}>Зареєструватися</Text>
-          </TouchableOpacity>
+          <Button text="Зареєструватися" onPress={onSignUp} />
           <View style={styles.loginTextContainer}>
             <Text style={styles.loginText}>Вже є акаунт? </Text>
             <TouchableOpacity onPress={onSignIn}>

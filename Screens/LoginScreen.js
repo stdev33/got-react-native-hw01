@@ -12,6 +12,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { colors } from "../styles/global";
+import Button from "../components/Button";
 import BgImage from "../assets/images/photo_bg.png";
 
 export default function LoginScreen() {
@@ -85,9 +86,7 @@ export default function LoginScreen() {
           </View>
         </KeyboardAvoidingView>
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={styles.registerButton} onPress={onLogin}>
-            <Text style={styles.registerButtonText}>Увійти</Text>
-          </TouchableOpacity>
+          <Button text="Увійти" onPress={onLogin} />
           <View style={styles.loginTextContainer}>
             <Text style={styles.loginText}>Немає акаунту? </Text>
             <TouchableOpacity onPress={onSignUp}>
