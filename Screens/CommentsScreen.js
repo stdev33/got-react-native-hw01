@@ -5,7 +5,9 @@ import { colors, header } from "../styles/global";
 import IconButton from "../components/IconButton";
 import BackIcon from "../assets/icons//arrow-left.svg";
 
-export default function CommentsScreen({ navigation }) {
+export default function CommentsScreen({ navigation, route }) {
+  const post = route.params?.post;
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Коментарі",

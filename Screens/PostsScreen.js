@@ -47,11 +47,15 @@ export default function PostsScreen({ navigation }) {
     });
   }, [navigation]);
 
+  const onCommentsPress = (post) => {
+    navigation.navigate("Comments", { post });
+  };
+
   return (
     <ScrollView style={styles.container}>
       <UserHeader user={user} />
       {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
+        <PostCard key={post.id} post={post} onCommentsPress={onCommentsPress} />
       ))}
     </ScrollView>
   );
