@@ -9,6 +9,7 @@ import LoginScreen from "./Screens/LoginScreen";
 import PostsScreen from "./Screens/PostsScreen";
 import CreatePostsScreen from "./Screens/CreatePostsScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
+import CommentsScreen from "./Screens/CommentsScreen";
 import { bottomTab } from "./styles/global";
 import PostsIcon from "./assets/icons/grid.svg";
 import CreateIcon from "./assets/icons/new.svg";
@@ -46,7 +47,9 @@ function Home() {
       <Tab.Screen
         name="Create"
         component={CreatePostsScreen}
-        options={{ tabBarVisible: false }}
+        options={({ route }) => ({
+          tabBarStyle: { display: "none" },
+        })}
       />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
@@ -82,6 +85,7 @@ export default function App() {
           component={Home}
           options={{ headerShown: false }}
         />
+        <Stack.Screen name="Comments" component={CommentsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

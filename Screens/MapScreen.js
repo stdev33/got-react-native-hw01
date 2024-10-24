@@ -3,29 +3,26 @@ import { useLayoutEffect } from "react";
 
 import { colors, header } from "../styles/global";
 import IconButton from "../components/IconButton";
-import LogoutIcon from "../assets/icons/log-out.svg";
+import BackIcon from "../assets/icons//arrow-left.svg";
 
-export default function PostsScreen({ navigation }) {
+export default function MapScreen({ navigation }) {
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Публікації",
+      headerTitle: "",
       headerStyle: header.headerStyle,
       headerTitleStyle: header.headerTitleStyle,
-      headerRightContainerStyle: header.headerRightContainerStyle,
+      headerLeftContainerStyle: header.headerLeftContainerStyle,
       headerTitleContainerStyle: header.headerTitleContainerStyle,
-      headerRight: () => (
-        <IconButton
-          Icon={LogoutIcon}
-          onPress={() => navigation.replace("Login")}
-        />
+      headerLeft: () => (
+        <IconButton Icon={BackIcon} onPress={() => navigation.goBack()} />
       ),
     });
   }, [navigation]);
 
   return (
     <>
-      <TouchableOpacity onPress={() => navigation.navigate("Comments")}>
-        <Text style={styles.buttonText}>PostsScreen</Text>
+      <TouchableOpacity>
+        <Text style={styles.buttonText}>MapScreen</Text>
       </TouchableOpacity>
     </>
   );
