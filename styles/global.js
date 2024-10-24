@@ -7,3 +7,28 @@ export const colors = {
   orange: "#FF6C00",
   placeholder: "#BDBDBD",
 };
+
+export const header = {
+  headerStyle: {
+    backgroundColor: colors.white,
+  },
+  headerTitleStyle: {
+    color: colors.black_primary,
+    fontSize: 17,
+    fontFamily: "Roboto-Medium",
+  },
+  headerRightContainerStyle: { paddingRight: 16, paddingBottom: 10 },
+  headerTitleContainerStyle: { paddingBottom: 11 },
+};
+
+export const bottomTab = {
+  tabBarStyle: {
+    height: 83,
+    backgroundColor: colors.white,
+    paddingVertical: 9,
+    paddingHorizontal: 82,
+  },
+  iconsWrapper: {
+    marginHorizontal: 30,
+  },
+};
