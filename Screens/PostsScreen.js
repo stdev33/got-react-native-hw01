@@ -1,9 +1,34 @@
-import { StyleSheet, TouchableOpacity, Text } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 import { useLayoutEffect } from "react";
 
 import { colors, header } from "../styles/global";
+import UserHeader from "../components/UserHeader";
+import PostCard from "../components/PostCard";
 import IconButton from "../components/IconButton";
 import LogoutIcon from "../assets/icons/log-out.svg";
+
+const user = {
+  name: "Natali Romanova",
+  email: "email@example.com",
+  photo: require("../assets/images/user-photo.png"),
+};
+
+const posts = [
+  {
+    id: 1,
+    image: require("../assets/images/forest.png"),
+    title: "Ліс",
+    comments: 8,
+    location: "Ivano-Frankivs'k Region, Ukraine",
+  },
+  {
+    id: 2,
+    image: require("../assets/images/black-sea-sunset.png"),
+    title: "Захід на Чорному морі",
+    comments: 3,
+    location: "Ukraine",
+  },
+];
 
 export default function PostsScreen({ navigation }) {
   useLayoutEffect(() => {
@@ -23,18 +48,19 @@ export default function PostsScreen({ navigation }) {
   }, [navigation]);
 
   return (
-    <>
-      <TouchableOpacity onPress={() => navigation.navigate("Comments")}>
-        <Text style={styles.buttonText}>PostsScreen</Text>
-      </TouchableOpacity>
-    </>
+    <ScrollView style={styles.container}>
+      <UserHeader user={user} />
+      {posts.map((post) => (
+        <PostCard key={post.id} post={post} />
+      ))}
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  buttonText: {
-    color: colors.orange,
-    fontSize: 16,
-    fontFamily: "Roboto-Regular",
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+    paddingTop: 16,
   },
 });
