@@ -18,14 +18,14 @@ const posts = [
     id: 1,
     image: require("../assets/images/forest.png"),
     title: "Ліс",
-    comments: 8,
+    comments: 0,
     location: "Ivano-Frankivs'k Region, Ukraine",
   },
   {
     id: 2,
     image: require("../assets/images/black-sea-sunset.png"),
     title: "Захід на Чорному морі",
-    comments: 3,
+    comments: 0,
     location: "Ukraine",
   },
 ];

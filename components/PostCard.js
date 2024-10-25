@@ -3,6 +3,8 @@ import { View, Text, Image, StyleSheet } from "react-native";
 
 import IconButton from "../components/IconButton";
 import CommentIcon from "../assets/icons/message.svg";
+import CommentAvailIcon from "../assets/icons/message-filled.svg";
+import LikeIcon from "../assets/icons/thumbs-up.svg";
 import LocationIcon from "../assets/icons/map-pin.svg";
 import { colors } from "../styles/global";
 
@@ -12,14 +14,42 @@ export default function PostCard({ post, onCommentsPress }) {
       <Image source={post.image} style={styles.postImage} />
       <Text style={styles.postTitle}>{post.title}</Text>
       <View style={styles.postInfo}>
-        <View style={styles.comments}>
-          <IconButton
-            Icon={CommentIcon}
-            width={24}
-            height={24}
-            onPress={() => onCommentsPress?.(post)}
-          />
-          <Text style={styles.commentCount}>{post.comments}</Text>
+        <View style={styles.postInfoLeft}>
+          <View style={styles.comments}>
+            <IconButton
+              Icon={post.comments > 0 ? CommentAvailIcon : CommentIcon}
+              width={24}
+              height={24}
+              onPress={() => onCommentsPress?.(post)}
+            />
+            <Text
+              style={[
+                styles.commentCount,
+                post.comments > 0 && styles.commentCountAvail,
+              ]}
+            >
+              {post.comments}
+            </Text>
+          </View>
+          {post.likesCount > 0 && (
+            <View style={styles.comments}>
+              <IconButton
+                Icon={LikeIcon}
+                width={24}
+                height={24}
+                iconFill={colors.orange}
+                onPress={() => onCommentsPress?.(post)}
+              />
+              <Text
+                style={[
+                  styles.commentCount,
+                  post.likesCount > 0 && styles.commentCountAvail,
+                ]}
+              >
+                {post.likesCount}
+              </Text>
+            </View>
+          )}
         </View>
         <View style={styles.location}>
           <LocationIcon width={24} height={24} />
@@ -49,6 +79,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  postInfoLeft: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 16,
+  },
   comments: {
     flexDirection: "row",
     alignItems: "center",
@@ -58,6 +93,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Roboto-Regular",
     color: colors.placeholder,
+  },
+  commentCountAvail: {
+    color: colors.black_primary,
   },
   location: {
     flexDirection: "row",
