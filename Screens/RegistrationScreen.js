@@ -12,10 +12,11 @@ import {
   ImageBackground,
 } from "react-native";
 import { colors } from "../styles/global";
-import RegistrationPhotoPicker from "./RegistrationPhotoPicker";
+import RegistrationPhotoPicker from "../components/RegistrationPhotoPicker";
+import Button from "../components/Button";
 import BgImage from "../assets/images/photo_bg.png";
 
-export default function RegistrationScreen() {
+export default function RegistrationScreen({ navigation }) {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,10 +37,11 @@ export default function RegistrationScreen() {
 
   const onSignUp = () => {
     console.log(`Login: ${login} email: ${email} password: ${password}`);
+    navigation.replace("Home");
   };
 
   const onSignIn = () => {
-    console.log("Sign in");
+    navigation.navigate("Login");
   };
 
   return (
@@ -104,9 +106,7 @@ export default function RegistrationScreen() {
           </View>
         </KeyboardAvoidingView>
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={styles.registerButton} onPress={onSignUp}>
-            <Text style={styles.registerButtonText}>Зареєструватися</Text>
-          </TouchableOpacity>
+          <Button text="Зареєструватися" onPress={onSignUp} />
           <View style={styles.loginTextContainer}>
             <Text style={styles.loginText}>Вже є акаунт? </Text>
             <TouchableOpacity onPress={onSignIn}>
@@ -178,18 +178,6 @@ const styles = StyleSheet.create({
     paddingTop: 11,
     paddingHorizontal: 16,
     paddingBottom: 78,
-  },
-  registerButton: {
-    backgroundColor: colors.orange,
-    borderRadius: 100,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  registerButtonText: {
-    color: colors.white,
-    fontSize: 16,
-    fontFamily: "Roboto-Regular",
   },
   loginTextContainer: {
     flexDirection: "row",
