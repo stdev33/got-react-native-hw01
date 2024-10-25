@@ -7,6 +7,7 @@ export default function IconButton({
   iconStyle,
   iconStyleDisabled,
   onPress,
+  iconFill = "#FFFFFF",
   width = 24,
   height = 24,
   enabled = true,
@@ -21,6 +22,7 @@ export default function IconButton({
           style={enabled ? iconStyle : iconStyleDisabled}
           width={width}
           height={height}
+          fill={iconFill}
         />
       )}
     </TouchableOpacity>

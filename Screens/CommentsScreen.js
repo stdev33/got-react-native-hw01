@@ -101,6 +101,7 @@ export default function CommentsScreen({ navigation, route }) {
         />
         <IconButton
           Icon={SendIcon}
+          iconFill={colors.orange}
           width={34}
           height={34}
           onPress={handleSendComment}
