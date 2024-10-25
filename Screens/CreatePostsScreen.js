@@ -3,7 +3,6 @@ import {
   TextInput,
   StyleSheet,
   Text,
-  Image,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
