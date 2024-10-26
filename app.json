@@ -12,7 +12,12 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "ios": {
+      "infoPlist": {
+        "NSCameraUsageDescription": "Цей додаток потребує доступу до камери для створення фотографій для постів."
+      }
+    }
     },
     "android": {
       "adaptiveIcon": {
@@ -24,7 +29,19 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Додаток $(PRODUCT_NAME) потребує доступу до камери для створення фотографій для постів."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location to show where the picture was taken."
+        }
+      ]
     ]
   }
 }

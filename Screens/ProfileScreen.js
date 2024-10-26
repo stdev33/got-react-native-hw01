@@ -14,37 +14,15 @@ import RegistrationPhotoPicker from "../components/RegistrationPhotoPicker";
 import IconButton from "../components/IconButton";
 import PostCard from "../components/PostCard";
 import LogoutIcon from "../assets/icons/log-out.svg";
+import { ProfileScreenUser as user } from "../mok/mok";
 
 export default function ProfileScreen({ navigation }) {
-  const user = {
-    name: "Natali Romanova",
-    email: "email@example.com",
-    posts: [
-      {
-        id: 1,
-        image: require("../assets/images/forest.png"),
-        title: "Ліс",
-        comments: 8,
-        location: "Ivano-Frankivs'k Region, Ukraine",
-        likesCount: 153,
-      },
-      {
-        id: 2,
-        image: require("../assets/images/black-sea-sunset.png"),
-        title: "Захід на Чорному морі",
-        comments: 3,
-        location: "Ukraine",
-        likesCount: 200,
-      },
-      {
-        id: 3,
-        image: require("../assets/images/venice.png"),
-        title: "Старий будиночок у Венеції",
-        comments: 50,
-        location: "Italy",
-        likesCount: 200,
-      },
-    ],
+  const onCommentsPress = (post) => {
+    navigation.navigate("Comments", { post });
+  };
+
+  const onLocationPress = (post) => {
+    navigation.navigate("Map", { post });
   };
 
   return (
@@ -63,7 +41,12 @@ export default function ProfileScreen({ navigation }) {
 
         <ScrollView>
           {user.posts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard
+              key={post.id}
+              post={post}
+              onCommentsPress={onCommentsPress}
+              onLocationPress={onLocationPress}
+            />
           ))}
         </ScrollView>
       </View>

@@ -6,31 +6,15 @@ import UserHeader from "../components/UserHeader";
 import PostCard from "../components/PostCard";
 import IconButton from "../components/IconButton";
 import LogoutIcon from "../assets/icons/log-out.svg";
+import { PostsScreenUser as user } from "../mok/mok";
 
-const user = {
-  name: "Natali Romanova",
-  email: "email@example.com",
-  photo: require("../assets/images/user-photo.png"),
-};
+export default function PostsScreen({ navigation, route }) {
+  const { newPost = null } = route.params || {};
 
-const posts = [
-  {
-    id: 1,
-    image: require("../assets/images/forest.png"),
-    title: "Ліс",
-    comments: 0,
-    location: "Ivano-Frankivs'k Region, Ukraine",
-  },
-  {
-    id: 2,
-    image: require("../assets/images/black-sea-sunset.png"),
-    title: "Захід на Чорному морі",
-    comments: 0,
-    location: "Ukraine",
-  },
-];
+  if (newPost) {
+    user.posts.unshift(newPost);
+  }
 
-export default function PostsScreen({ navigation }) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Публікації",
@@ -51,11 +35,20 @@ export default function PostsScreen({ navigation }) {
     navigation.navigate("Comments", { post });
   };
 
+  const onLocationPress = (post) => {
+    navigation.navigate("Map", { post });
+  };
+
   return (
     <ScrollView style={styles.container}>
       <UserHeader user={user} />
-      {posts.map((post) => (
-        <PostCard key={post.id} post={post} onCommentsPress={onCommentsPress} />
+      {user.posts.map((post) => (
+        <PostCard
+          key={post.id}
+          post={post}
+          onCommentsPress={onCommentsPress}
+          onLocationPress={onLocationPress}
+        />
       ))}
     </ScrollView>
   );

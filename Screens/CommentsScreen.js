@@ -16,41 +16,10 @@ import CommentCard from "../components/CommentCard";
 import IconButton from "../components/IconButton";
 import BackIcon from "../assets/icons//arrow-left.svg";
 import SendIcon from "../assets/icons/send.svg";
+import { Comments as comments } from "../mok/mok";
 
 export default function CommentsScreen({ navigation, route }) {
-  const post = route.params?.post;
-
-  const [comments, setComments] = useState([
-    {
-      id: 1,
-      avatar: require("../assets/images/user1.png"),
-      text: "Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!",
-      date: "09 червня, 2020 | 08:40",
-      userType: "user",
-    },
-    {
-      id: 2,
-      avatar: require("../assets/images/user2.png"),
-      text: "A fast 50mm like f1.8 would help with the bokeh. I’ve been using primes as they tend to get a bit sharper images.",
-      date: "09 червня, 2020 | 09:14",
-      userType: "author",
-    },
-    {
-      id: 3,
-      avatar: require("../assets/images/user1.png"),
-      text: "Could you share camera settings?",
-      date: "09 червня, 2020 | 09:20",
-      userType: "user",
-    },
-    {
-      id: 4,
-      avatar: require("../assets/images/user1.png"),
-      text: "Thank you!",
-      date: "09 червня, 2020 | 09:21",
-      userType: "user",
-    },
-  ]);
-
+  const { post } = route.params;
   const [newComment, setNewComment] = useState("");
   const [activeInput, setActiveInput] = useState(null);
 
