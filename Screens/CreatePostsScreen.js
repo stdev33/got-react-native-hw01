@@ -3,24 +3,36 @@ import {
   TextInput,
   StyleSheet,
   Text,
+  Image,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  ActivityIndicator,
 } from "react-native";
-import React, { useLayoutEffect, useState } from "react";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import * as Location from "expo-location";
+import React, { useLayoutEffect, useState, useRef } from "react";
 
 import { colors, header } from "../styles/global";
 import Button from "../components/Button";
 import CameraIcon from "../assets/icons/camera-gray.svg";
+import EditCameraIcon from "../assets/icons/camera-white.svg";
 import LocationIcon from "../assets/icons/map-pin.svg";
 import DeleteIcon from "../assets/icons/trash.svg";
 import IconButton from "../components/IconButton";
 import BackIcon from "../assets/icons//arrow-left.svg";
 
+const randomPostId = () =>
+  Math.random().toString(36).substring(2) + Date.now().toString(36);
+
 export default function CreatePostsScreen({ navigation }) {
+  const [permission, requestPermission] = useCameraPermissions();
+  const cameraRef = useRef(null);
+  const [location, setLocation] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
-  const [location, setLocation] = useState("");
+  const [locationText, setLocationText] = useState("");
   const [image, setImage] = useState(null);
 
   useLayoutEffect(() => {
@@ -36,9 +48,79 @@ export default function CreatePostsScreen({ navigation }) {
     });
   }, [navigation]);
 
-  const onPublish = () => {
-    console.log(`Title: ${title}, Location: ${location}`);
+  if (!permission) {
+    // Camera permissions are still loading.
+    return <View />;
+  }
+
+  if (!permission.granted) {
+    // Camera permissions are not granted yet.
+    requestPermission();
+  }
+
+  const fetchLocation = async () => {
+    setLoading(true);
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      console.log("Permission to access location was denied");
+      setLoading(false);
+      return;
+    }
+
+    const attemptsCount = 5;
+    let locationData = null;
+    for (let attempt = 1; attempt <= attemptsCount; attempt++) {
+      locationData = await Location.getCurrentPositionAsync({}).catch((error) =>
+        console.log(`Attempt ${attempt} failed: `, error)
+      );
+
+      if (locationData) {
+        console.log("Location fetched: ", locationData);
+        setLocation(locationData);
+        break;
+      } else {
+        console.log(`Retrying to fetch location, attempt ${attempt}`);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    }
+
+    if (!locationData) {
+      console.log("Could not fetch location after 3 attempts");
+    }
+
+    setLoading(false);
+    return locationData;
   };
+
+  const onPublish = async () => {
+    if (loading) {
+      return;
+    }
+
+    if (title && locationText && image) {
+      Keyboard.dismiss();
+
+      const locationData = await fetchLocation();
+
+      const newPost = {
+        id: randomPostId(),
+        image: { uri: image },
+        title,
+        comments: 0,
+        location: locationText,
+        locationCoords: locationData ? locationData.coords : null,
+        likesCount: 0,
+      };
+
+      navigation.navigate("Posts", { newPost });
+
+      setImage(null);
+      setTitle("");
+      setLocationText("");
+    }
+  };
+
+  const onClearImage = () => setImage(null);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -46,14 +128,35 @@ export default function CreatePostsScreen({ navigation }) {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
       >
+        {loading && <ActivityIndicator size="large" color={colors.orange} />}
         <View style={styles.imageContainer}>
-          <IconButton
-            Icon={CameraIcon}
-            bgStyle={styles.imageButton}
-            width={60}
-            height={60}
-            onPress={() => console.log("Camera")}
-          />
+          {image ? (
+            <View style={styles.camera} ref={cameraRef}>
+              <Image source={{ uri: image }} style={styles.capturedImage} />
+              <IconButton
+                Icon={EditCameraIcon}
+                bgStyle={styles.imageButton}
+                width={60}
+                height={60}
+                onPress={onClearImage}
+              />
+            </View>
+          ) : (
+            <CameraView style={styles.camera} ref={cameraRef}>
+              <IconButton
+                Icon={CameraIcon}
+                bgStyle={styles.imageButton}
+                width={60}
+                height={60}
+                onPress={async () => {
+                  if (cameraRef) {
+                    const photo = await cameraRef.current.takePictureAsync();
+                    setImage(photo.uri);
+                  }
+                }}
+              />
+            </CameraView>
+          )}
         </View>
         {image ? (
           <Text style={styles.supportingText}>Редагувати фото</Text>
@@ -78,17 +181,21 @@ export default function CreatePostsScreen({ navigation }) {
             placeholder="Місцевість..."
             placeholderTextColor={colors.placeholder}
             style={styles.locationInput}
-            value={location}
-            onChangeText={setLocation}
+            value={locationText}
+            onChangeText={setLocationText}
           />
         </View>
-        <Button text={"Опублікувати"} onPress={onPublish} enabled={false} />
+        <Button
+          text={"Опублікувати"}
+          onPress={onPublish}
+          enabled={title && locationText && image && !loading}
+        />
         <View style={styles.deleteBtnContainer}>
           <IconButton
             Icon={DeleteIcon}
             width={70}
             height={40}
-            onPress={() => console.log("Cleanup")}
+            onPress={onClearImage}
           />
         </View>
       </KeyboardAvoidingView>
@@ -102,6 +209,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 32,
     backgroundColor: colors.white,
+  },
+  camera: {
+    width: "100%",
+    height: "100%",
+  },
+  capturedImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 8,
   },
   imageContainer: {
     justifyContent: "center",

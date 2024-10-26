@@ -3,6 +3,7 @@ import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { StatusBar } from "react-native";
 
 import RegistrationScreen from "./Screens/RegistrationScreen";
 import LoginScreen from "./Screens/LoginScreen";
@@ -10,6 +11,7 @@ import PostsScreen from "./Screens/PostsScreen";
 import CreatePostsScreen from "./Screens/CreatePostsScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
 import CommentsScreen from "./Screens/CommentsScreen";
+import MapScreen from "./Screens/MapScreen";
 import { bottomTab } from "./styles/global";
 import PostsIcon from "./assets/icons/grid.svg";
 import CreateIcon from "./assets/icons/new.svg";
@@ -73,6 +75,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
+      <StatusBar barStyle="dark-content" />
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Login"
@@ -90,6 +93,7 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Comments" component={CommentsScreen} />
+        <Stack.Screen name="Map" component={MapScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

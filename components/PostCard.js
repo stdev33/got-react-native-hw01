@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 import IconButton from "../components/IconButton";
 import CommentIcon from "../assets/icons/message.svg";
@@ -8,7 +8,12 @@ import LikeIcon from "../assets/icons/thumbs-up.svg";
 import LocationIcon from "../assets/icons/map-pin.svg";
 import { colors } from "../styles/global";
 
-export default function PostCard({ post, onCommentsPress }) {
+export default function PostCard({
+  post,
+  onCommentsPress,
+  onLikePress,
+  onLocationPress,
+}) {
   return (
     <View style={styles.container}>
       <Image source={post.image} style={styles.postImage} />
@@ -38,7 +43,7 @@ export default function PostCard({ post, onCommentsPress }) {
                 width={24}
                 height={24}
                 iconFill={colors.orange}
-                onPress={() => onCommentsPress?.(post)}
+                onPress={() => onLikePress?.(post)}
               />
               <Text
                 style={[
@@ -51,10 +56,13 @@ export default function PostCard({ post, onCommentsPress }) {
             </View>
           )}
         </View>
-        <View style={styles.location}>
+        <TouchableOpacity
+          style={styles.location}
+          onPress={() => onLocationPress?.(post)}
+        >
           <LocationIcon width={24} height={24} />
           <Text style={styles.locationName}>{post.location}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
