@@ -2,8 +2,15 @@ import { View, StyleSheet, Text, Image } from "react-native";
 
 import { colors } from "../styles/global";
 
-export default function CommentCard({ comment }) {
-  const isAuthor = comment.userType === "author";
+export default function CommentCard({ comment, isAuthor }) {
+  const formattedDate =
+    new Date(comment.date).toLocaleDateString("uk-UA") +
+    " | " +
+    new Date(comment.date).toLocaleTimeString("uk-UA", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
   return (
     <View style={styles.commentCard}>
       {!isAuthor && <Image source={comment.avatar} style={styles.avatar} />}
@@ -22,7 +29,7 @@ export default function CommentCard({ comment }) {
             isAuthor ? styles.commentDateAuthor : styles.commentDateUser,
           ]}
         >
-          {comment.date}
+          {formattedDate}
         </Text>
       </View>
       {isAuthor && <Image source={comment.avatar} style={styles.avatar} />}

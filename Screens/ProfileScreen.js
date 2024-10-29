@@ -6,6 +6,11 @@ import {
   ScrollView,
   ImageBackground,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebaseConfig";
+import { logoutUser } from "../redux/userSlice";
+import { selectUserPosts } from "../redux/postsSlice";
 
 import BgImage from "../assets/images/photo_bg.png";
 import UserPhoto from "../assets/images/user-photo.png";
@@ -17,6 +22,21 @@ import LogoutIcon from "../assets/icons/log-out.svg";
 import { ProfileScreenUser as user } from "../mok/mok";
 
 export default function ProfileScreen({ navigation }) {
+  const dispatch = useDispatch();
+  const posts = useSelector((state) =>
+    selectUserPosts(state, auth.currentUser?.uid)
+  );
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      dispatch(logoutUser());
+      navigation.replace("Login");
+    } catch (error) {
+      alert("Помилка", "Не вдалося вийти з системи. Спробуйте ще раз.");
+    }
+  };
+
   const onCommentsPress = (post) => {
     navigation.navigate("Comments", { post });
   };
@@ -34,13 +54,13 @@ export default function ProfileScreen({ navigation }) {
           width={24}
           height={24}
           bgStyle={styles.logoutButton}
-          onPress={() => navigation.replace("Login")}
+          onPress={handleLogout}
         />
 
-        <Text style={styles.userName}>{user.name}</Text>
+        <Text style={styles.userName}>{user.displayName}</Text>
 
         <ScrollView>
-          {user.posts.map((post) => (
+          {posts.map((post) => (
             <PostCard
               key={post.id}
               post={post}

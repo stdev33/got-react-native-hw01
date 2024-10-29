@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../redux/userSlice";
 import {
   View,
   TextInput,
@@ -11,6 +13,8 @@ import {
   Platform,
   ImageBackground,
 } from "react-native";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../firebaseConfig";
 import { colors } from "../styles/global";
 import RegistrationPhotoPicker from "../components/RegistrationPhotoPicker";
 import Button from "../components/Button";
@@ -22,6 +26,7 @@ export default function RegistrationScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [activeInput, setActiveInput] = useState(null);
+  const dispatch = useDispatch();
 
   const onLoginChange = (value) => {
     setLogin(value);
@@ -35,9 +40,26 @@ export default function RegistrationScreen({ navigation }) {
     setPassword(value);
   };
 
-  const onSignUp = () => {
-    console.log(`Login: ${login} email: ${email} password: ${password}`);
-    navigation.replace("Home");
+  const onSignUp = async () => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      await updateProfile(auth.currentUser, { displayName: login });
+
+      const user = userCredential.user;
+      dispatch(
+        loginUser({ uid: user.uid, email: user.email, displayName: login })
+      );
+
+      console.log("User registered");
+      navigation.replace("Home");
+    } catch (error) {
+      alert("Помилка реєстрації", error.message);
+    }
   };
 
   const onSignIn = () => {

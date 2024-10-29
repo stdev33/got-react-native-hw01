@@ -10,18 +10,31 @@ import {
   TextInput,
 } from "react-native";
 import { useLayoutEffect, useState } from "react";
+import { db } from "../firebaseConfig";
+import {
+  collection,
+  addDoc,
+  getDoc,
+  doc,
+  serverTimestamp,
+} from "firebase/firestore";
+import { useDispatch, useSelector } from "react-redux";
+import { addCommentToPost, selectPostComments } from "../redux/postsSlice";
 
 import { colors, header } from "../styles/global";
 import CommentCard from "../components/CommentCard";
 import IconButton from "../components/IconButton";
 import BackIcon from "../assets/icons//arrow-left.svg";
 import SendIcon from "../assets/icons/send.svg";
-import { Comments as comments } from "../mok/mok";
+import { PostsScreenUser as mokUser } from "../mok/mok";
 
 export default function CommentsScreen({ navigation, route }) {
   const { post } = route.params;
   const [newComment, setNewComment] = useState("");
   const [activeInput, setActiveInput] = useState(null);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.userInfo);
+  const comments = useSelector((state) => selectPostComments(state, post.id));
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -36,8 +49,39 @@ export default function CommentsScreen({ navigation, route }) {
     });
   }, [navigation]);
 
-  const handleSendComment = () => {
-    console.log("New comment: ", newComment);
+  const handleSendComment = async () => {
+    console.log("Send comment");
+    if (!newComment.trim()) {
+      return;
+    }
+
+    const commentData = {
+      text: newComment,
+      date: serverTimestamp(),
+      userId: user.uid,
+      avatar: mokUser.photo || null,
+    };
+
+    try {
+      const postRef = doc(db, "posts", post.id);
+      const commentRef = await addDoc(
+        collection(postRef, "comments"),
+        commentData
+      );
+
+      const savedCommentSnapshot = await getDoc(commentRef);
+      const savedComment = {
+        id: commentRef.id,
+        ...commentData,
+        date: savedCommentSnapshot.data().date.toDate().toISOString(),
+      };
+
+      dispatch(addCommentToPost({ postId: post.id, comment: savedComment }));
+      setNewComment("");
+      Keyboard.dismiss();
+    } catch (error) {
+      console.log("Error adding comment: ", error);
+    }
   };
 
   return (
@@ -51,7 +95,11 @@ export default function CommentsScreen({ navigation, route }) {
       </TouchableWithoutFeedback>
       <ScrollView style={styles.commentsList}>
         {comments.map((comment) => (
-          <CommentCard key={comment.id} comment={comment} />
+          <CommentCard
+            key={comment.id}
+            comment={comment}
+            isAuthor={comment.userId === user.uid}
+          />
         ))}
       </ScrollView>
       <View
@@ -67,6 +115,7 @@ export default function CommentsScreen({ navigation, route }) {
           onFocus={() => setActiveInput("send_comment")}
           onBlur={() => setActiveInput(null)}
           onChangeText={setNewComment}
+          value={newComment}
         />
         <IconButton
           Icon={SendIcon}

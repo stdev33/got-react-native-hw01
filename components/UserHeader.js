@@ -8,7 +8,7 @@ export default function UserHeader({ user }) {
     <View style={styles.container}>
       <Image source={user.photo} style={styles.userPhoto} />
       <View style={styles.userInfo}>
-        <Text style={styles.userName}>{user.name}</Text>
+        <Text style={styles.userName}>{user.displayName}</Text>
         <Text style={styles.userEmail}>{user.email}</Text>
       </View>
     </View>

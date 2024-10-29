@@ -1,5 +1,9 @@
 import { StyleSheet, ScrollView } from "react-native";
 import { useLayoutEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebaseConfig";
+import { logoutUser } from "../redux/userSlice";
 
 import { colors, header } from "../styles/global";
 import UserHeader from "../components/UserHeader";
@@ -8,12 +12,19 @@ import IconButton from "../components/IconButton";
 import LogoutIcon from "../assets/icons/log-out.svg";
 import { PostsScreenUser as user } from "../mok/mok";
 
-export default function PostsScreen({ navigation, route }) {
-  const { newPost = null } = route.params || {};
+export default function PostsScreen({ navigation }) {
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.posts.posts);
 
-  if (newPost) {
-    user.posts.unshift(newPost);
-  }
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      dispatch(logoutUser());
+      navigation.replace("Login");
+    } catch (error) {
+      alert("Помилка", "Не вдалося вийти з системи. Спробуйте ще раз.");
+    }
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -23,10 +34,7 @@ export default function PostsScreen({ navigation, route }) {
       headerRightContainerStyle: header.headerRightContainerStyle,
       headerTitleContainerStyle: header.headerTitleContainerStyle,
       headerRight: () => (
-        <IconButton
-          Icon={LogoutIcon}
-          onPress={() => navigation.replace("Login")}
-        />
+        <IconButton Icon={LogoutIcon} onPress={handleLogout} />
       ),
     });
   }, [navigation]);
@@ -42,7 +50,7 @@ export default function PostsScreen({ navigation, route }) {
   return (
     <ScrollView style={styles.container}>
       <UserHeader user={user} />
-      {user.posts.map((post) => (
+      {posts.map((post) => (
         <PostCard
           key={post.id}
           post={post}
