@@ -22,7 +22,7 @@ export default function PostCard({
         <View style={styles.postInfoLeft}>
           <View style={styles.comments}>
             <IconButton
-              Icon={post.comments > 0 ? CommentAvailIcon : CommentIcon}
+              Icon={post.comments.length > 0 ? CommentAvailIcon : CommentIcon}
               width={24}
               height={24}
               onPress={() => onCommentsPress?.(post)}
@@ -30,10 +30,10 @@ export default function PostCard({
             <Text
               style={[
                 styles.commentCount,
-                post.comments > 0 && styles.commentCountAvail,
+                post.comments.length > 0 && styles.commentCountAvail,
               ]}
             >
-              {post.comments}
+              {post.comments.length}
             </Text>
           </View>
           {post.likesCount > 0 && (

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../redux/userSlice";
 import {
   View,
   TextInput,
@@ -11,6 +13,8 @@ import {
   Platform,
   ImageBackground,
 } from "react-native";
+import { auth } from "../firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { colors } from "../styles/global";
 import Button from "../components/Button";
 import BgImage from "../assets/images/photo_bg.png";
@@ -20,6 +24,7 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [activeInput, setActiveInput] = useState(null);
+  const dispatch = useDispatch();
 
   const onEmailChange = (value) => {
     setEmail(value);
@@ -29,9 +34,28 @@ export default function LoginScreen({ navigation }) {
     setPassword(value);
   };
 
-  const onLogin = () => {
-    console.log(`Email: ${email} password: ${password}`);
-    navigation.replace("Home");
+  const onLogin = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      dispatch(
+        loginUser({
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+        })
+      );
+
+      console.log("User logged in");
+      navigation.replace("Home");
+    } catch (error) {
+      alert("Помилка входу", error.message);
+    }
   };
 
   const onSignUp = () => {

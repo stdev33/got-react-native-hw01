@@ -13,7 +13,11 @@ import {
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as Location from "expo-location";
 import React, { useLayoutEffect, useState, useRef } from "react";
+import { collection, addDoc } from "firebase/firestore";
+import { useDispatch } from "react-redux";
+import { auth, db } from "../firebaseConfig";
 
+import { addPost } from "../redux/postsSlice";
 import { colors, header } from "../styles/global";
 import Button from "../components/Button";
 import CameraIcon from "../assets/icons/camera-gray.svg";
@@ -23,10 +27,8 @@ import DeleteIcon from "../assets/icons/trash.svg";
 import IconButton from "../components/IconButton";
 import BackIcon from "../assets/icons//arrow-left.svg";
 
-const randomPostId = () =>
-  Math.random().toString(36).substring(2) + Date.now().toString(36);
-
 export default function CreatePostsScreen({ navigation }) {
+  const dispatch = useDispatch();
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef(null);
   const [location, setLocation] = useState(null);
@@ -92,6 +94,17 @@ export default function CreatePostsScreen({ navigation }) {
     return locationData;
   };
 
+  const savePostToFirestore = async (newPost) => {
+    try {
+      const postRef = collection(db, "posts");
+      const docRef = await addDoc(postRef, newPost);
+      const postWithId = { ...newPost, id: docRef.id };
+      dispatch(addPost(postWithId));
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+  };
+
   const onPublish = async () => {
     if (loading) {
       return;
@@ -103,20 +116,24 @@ export default function CreatePostsScreen({ navigation }) {
       const locationData = await fetchLocation();
 
       const newPost = {
-        id: randomPostId(),
         image: { uri: image },
         title,
-        comments: 0,
+        comments: [],
         location: locationText,
         locationCoords: locationData ? locationData.coords : null,
         likesCount: 0,
+        userId: auth.currentUser?.uid,
       };
 
-      navigation.navigate("Posts", { newPost });
+      setLoading(true);
+      await savePostToFirestore(newPost);
+      setLoading(false);
 
       setImage(null);
       setTitle("");
       setLocationText("");
+
+      navigation.navigate("Posts");
     }
   };
 

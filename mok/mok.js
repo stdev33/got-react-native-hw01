@@ -1,77 +1,3 @@
-export const ProfileScreenUser = {
-  name: "Natali Romanova",
-  email: "email@example.com",
-  photo: require("../assets/images/user-photo.png"),
-  posts: [
-    {
-      id: 1,
-      image: require("../assets/images/forest.png"),
-      title: "Ліс",
-      comments: 8,
-      location: "Ivano-Frankivs'k Region, Ukraine",
-      likesCount: 153,
-      locationCoords: {
-        latitude: 48.9226,
-        longitude: 24.7111,
-      },
-    },
-    {
-      id: 2,
-      image: require("../assets/images/black-sea-sunset.png"),
-      title: "Захід на Чорному морі",
-      comments: 3,
-      location: "Ukraine",
-      likesCount: 200,
-      locationCoords: {
-        latitude: 46.4856,
-        longitude: 30.7449,
-      },
-    },
-    {
-      id: 3,
-      image: require("../assets/images/venice.png"),
-      title: "Старий будиночок у Венеції",
-      comments: 50,
-      location: "Italy",
-      likesCount: 200,
-      locationCoords: {
-        latitude: 45.4408,
-        longitude: 12.3155,
-      },
-    },
-  ],
-};
-
-export const PostsScreenUser = {
-  name: "Natali Romanova",
-  email: "email@example.com",
-  photo: require("../assets/images/user-photo.png"),
-  posts: [
-    {
-      id: 1,
-      image: require("../assets/images/forest.png"),
-      title: "Ліс",
-      comments: 0,
-      location: "Ivano-Frankivs'k Region, Ukraine",
-      locationCoords: {
-        latitude: 48.9226,
-        longitude: 24.7111,
-      },
-    },
-    {
-      id: 2,
-      image: require("../assets/images/black-sea-sunset.png"),
-      title: "Захід на Чорному морі",
-      comments: 0,
-      location: "Ukraine",
-      locationCoords: {
-        latitude: 46.4856,
-        longitude: 30.7449,
-      },
-    },
-  ],
-};
-
 export const Comments = [
   {
     id: 1,
@@ -102,3 +28,77 @@ export const Comments = [
     userType: "user",
   },
 ];
+
+export const ProfileScreenUser = {
+  displayName: "Natali Romanova",
+  email: "email@example.com",
+  photo: require("../assets/images/user-photo.png"),
+  posts: [
+    {
+      id: 1,
+      image: require("../assets/images/forest.png"),
+      title: "Ліс",
+      comments: Comments,
+      location: "Ivano-Frankivs'k Region, Ukraine",
+      likesCount: 153,
+      locationCoords: {
+        latitude: 48.9226,
+        longitude: 24.7111,
+      },
+    },
+    {
+      id: 2,
+      image: require("../assets/images/black-sea-sunset.png"),
+      title: "Захід на Чорному морі",
+      comments: Comments,
+      location: "Ukraine",
+      likesCount: 200,
+      locationCoords: {
+        latitude: 46.4856,
+        longitude: 30.7449,
+      },
+    },
+    {
+      id: 3,
+      image: require("../assets/images/venice.png"),
+      title: "Старий будиночок у Венеції",
+      comments: Comments,
+      location: "Italy",
+      likesCount: 200,
+      locationCoords: {
+        latitude: 45.4408,
+        longitude: 12.3155,
+      },
+    },
+  ],
+};
+
+export const PostsScreenUser = {
+  displayName: "Natali Romanova",
+  email: "email@example.com",
+  photo: require("../assets/images/user-photo.png"),
+  posts: [
+    {
+      id: 1,
+      image: require("../assets/images/forest.png"),
+      title: "Ліс",
+      comments: Comments,
+      location: "Ivano-Frankivs'k Region, Ukraine",
+      locationCoords: {
+        latitude: 48.9226,
+        longitude: 24.7111,
+      },
+    },
+    {
+      id: 2,
+      image: require("../assets/images/black-sea-sunset.png"),
+      title: "Захід на Чорному морі",
+      comments: Comments,
+      location: "Ukraine",
+      locationCoords: {
+        latitude: 46.4856,
+        longitude: 30.7449,
+      },
+    },
+  ],
+};
