@@ -14,16 +14,23 @@
     "ios": {
       "supportsTablet": true,
       "ios": {
-      "infoPlist": {
-        "NSCameraUsageDescription": "Цей додаток потребує доступу до камери для створення фотографій для постів."
+        "infoPlist": {
+          "NSCameraUsageDescription": "Цей додаток потребує доступу до камери для створення фотографій для постів."
+        }
       }
-    }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "package": "com.stdev33.HW1Project"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -42,6 +49,11 @@
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location to show where the picture was taken."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "710abb88-6ec9-47ae-8818-56f39d196e4b"
+      }
+    }
   }
 }
